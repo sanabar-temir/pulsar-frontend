@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>PULSAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ================== ПЕРЕМЕННЫЕ ТЕМЫ ================== */
+:root {
+  --bg: #0b0f19;
+  --card-bg: #0f1425;
+  --text: #ffffff;
+  --accent: #4f6bff;
+}
+
+body.light {
+  --bg: #ffffff;
+  --card-bg: #f3f5ff;
+  --text: #0b0f19;
+}
+
+/* ================== ОБЩЕЕ ================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: .3s;
+  margin: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ================== ШАПКА ================== */
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  
+
+  /* width: 100%;
+  background: linear-gradient(
+    90deg,
+    #052348,
+    #1d386a,
+    #14243c,
+    #1f344d,
+    #44447c
+  );
+  padding: 16px 0;
+} */
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-img {
+  height: 80px;
+}
+
+.contacts-wrapper {
+  position: relative;
+}
+
+.contacts-btn {
+  cursor: pointer;
+  font-size: 15px;
+  opacity: .9;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+
+.contacts-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #4B0082;
+  transition: width .25s ease;
+}
+
+.contacts-btn:hover::after {
+  width: 100%;
+}
+
+.contacts-dropdown {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  width: 280px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.25);
+  display: none;
+  z-index: 100;
+}
+
+.contacts-dropdown.show {
+  display: block;
+}
+
+.contact-item {
+  display: block;
+  padding: 8px 6px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 8px;
+}
+
+.contact-item:hover {
+  background: rgba(79,107,255,.1);
+}
+
+.contact-item span {
+  display: block;
+  font-size: 12px;
+  opacity: .7;
+}
+
+.contacts-link {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.search {
+  width: 520px;   /* ← можно 500–600px */
+  max-width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+}
+
+
+
+
+/* ================== НАВИГАЦИЯ ================== */
+.tabs-wrapper {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+/* 🔹 КНОПКА КАТАЛОГ — ВСЕГДА ОДИН ЦВЕТ */
+.catalog-tab {
+  background: #00CED1; /* ← твой цвет */
+  color: #ffffff;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* 🔹 ВКЛАДКИ */
+.tab {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px #e5e5e5 inset;
+}
+
+/* Активная вкладка */
+.tab.active {
+  background: #e6e6e6;
+  font-weight: 600;
+}
+
+/* ❗ Темы НЕ влияют на вкладки */
+body:not(.light) .tab {
+  background: #ffffff;
+  color: #000000;
+}
+
+body:not(.light) .tab.active {
+  background: #e6e6e6;
+}
+
+
+/* ================== СЛАЙДЕР ================== */
+.promo-slider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 80px; /* ← было меньше, делаем больше */
+  background: linear-gradient(135deg, #6f79ff, #7b6cff);
+  border-radius: 28px;
+  padding: 40px 60px;
+  margin: 20px;
+}
+
+
+/* Текст НЕ МЕНЯЕТСЯ */
+.promo-text {
+  color: #fff;
+  max-width: 40%;
+}
+
+.promo-text h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+/* КВАДРАТНЫЙ СЛАЙД */
+.promo-image {
+  width: 360px;
+  height: 360px;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+/* Картинки */
+.slide-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.slide-img.active {
+  opacity: 1;
+}
+
+
+/* ================== Кантакты карта  ================== */
+.map-section {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #6f79ff, #7b6cff);
+  color: #ffffff;
+}
+
+/* Левая часть */
+.map-info {
+  width: 35%;
+}
+
+.map-info h3 {
+  margin-bottom: 14px;
+  font-size: 22px;
+}
+
+.map-info p {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+/* Отдел продаж */
+.sales a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sales a:hover {
+  text-decoration: underline;
+}
+
+/* Кнопка */
+.map-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 12px 18px;
+  background: #ffffff;
+  color: #0a57c7;
+  text-decoration: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Карта */
+.map-frame {
+  width: 65%;
+  height: 340px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.map-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+
+/* ================== Карточки  ================== */
+.section-title {
+  font-size: 22px;
+  margin: 40px 0 20px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px;
+  color: #000;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.sku {
+  font-size: 12px;
+  color: #777;
+}
+
+.product-info h3 {
+  font-size: 14px;
+  margin: 6px 0 12px;
+}
+
+.product-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  color: #0a57c7;
+  font-weight: 600;
+}
+
+.fav {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+
+/* ================== Новости  ================== */
+.news-slider-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.news-slider {
+  overflow: hidden;
+  width: 100%;
+}
+
+.news-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.6s ease;
+}
+
+.news-card {
+  min-width: 260px;
+  background: #ffffff;
+  color: #000;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.news-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.news-card h3 {
+  font-size: 14px;
+  margin: 10px;
+}
+
+.news-card p {
+  font-size: 12px;
+  color: #555;
+  margin: 0 10px 12px;
+}
+
+/* Кнопки */
+.news-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 22px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+.news-btn.prev {
+  margin-right: 12px;
+}
+
+.news-btn.next {
+  margin-left: 12px;
+}
+
+
+/* ================== ФУТЕР ================== */
+.footer {
+  background: #2f3846;
+  color: #ffffff;
+  margin-top: 60px;
+}
+
+/* Верхняя часть */
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  padding: 40px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.footer-col h4 {
+  margin-bottom: 14px;
+  font-size: 16px;
+}
+
+.footer-col a {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #cfd6e1;
+  text-decoration: none;
+}
+
+.footer-col a:hover {
+  text-decoration: underline;
+}
+
+/* Нижняя часть */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  font-size: 14px;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.footer-logo {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 24px;
+}
+
+.social {
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: .9;
+}
+
+.social:hover {
+  opacity: 1;
+
+
+}
+
+/* ===== АНИМИРОВАННЫЙ ФОН ===== */
+
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  /* ТЁМНАЯ ТЕМА (по умолчанию) */
+  background: linear-gradient(
+    120deg,
+    #000000,
+    #0b1a3a,
+    #4b0082,
+    #ffd84d
+  );
+
+  background-size: 400% 400%;
+  animation: gradientFlow 18s ease-in-out infinite;
+  transition: background 0.6s ease;
+}
+
+/* ===== СВЕТЛАЯ ТЕМА ===== */
+body.light .animated-bg {
+  background: linear-gradient(
+    120deg,
+    #ffffff,
+    #3b6cff,
+    #ff0101
+  );
+
+  background-size: 400% 400%;
+  animation: gradientFlow 16s ease-in-out infinite;
+}
+
+/* ===== АНИМИРОВАННОЕ ПЕРЕЛИВАНИЕ ===== */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ОБЯЗАТЕЛЬНО: body без фона */
+body {
+  background: transparent !important;
+}
+
+
+</style>
+</head>
+
+<body>
+
+  <div class="animated-bg"></div>
+
+
+<!-- ================== ШАПКА ================== -->
+<div class="header-bg"></div>
+<header class="container header">
+  <div class="header-left">
+    <img src="img/Pulsarprozrachnyi.png" alt="Pulsar" class="logo-img">
+
+   <div class="contacts-wrapper">
+  <div class="contacts-btn" onclick="toggleContacts()">
+    Контакты <span class="arrow">⌄</span>
+  </div>
+
+  <div class="contacts-dropdown" id="contactsDropdown">
+    <a href="https://wa.me/996557540202" target="_blank" class="contact-item">
+      <strong>+996 (557) 54-02-02</strong>
+      <span>Байтик-Баатыра 17/2</span>
+    </a>
+
+    <a href="https://wa.me/996550241116" target="_blank" class="contact-item">
+      <strong>+996 (550) 24-11-16</strong>
+      <span>Тоголок молдо 6</span>
+    </a>
+
+    <a href="/contacts.html" class="contacts-link">
+      На страницу контакты
+    </a>
+  </div>
+</div>
+
+  <input class="search" placeholder="Поиск...">
+
+  <div class="header-right">
+    <div class="icon">KG</div>
+    <div class="icon">❤️</div>
+    <div class="icon">📸</div>
+   
+    <div class="icon" onclick="toggleTheme()">🌙</div>
+  </div>
+</header>
+</div>
+
+<!-- ================== НАВИГАЦИЯ ================== -->
+<section class="tabs-wrapper">
+  <a href="/catalog.html" class="catalog-tab">
+    ☰ Каталог
+  </a>
+
+  <a href="/led-screens.html" class="tab">LED-экраны</a>
+  <a href="speakers.html" class="tab">Колонки</a>
+  <a href="/office-tech.html" class="tab">Орг-техника</a>
+  <a href="/cameras.html" class="tab">Камеры</a>
+  <a href="/music.html" class="tab">Музыкальные инструменты</a>
+  <a href="/other.html" class="tab">Другое</a>
+</section>
+
+
+
+<!-- ================== СЛАЙДЕР ================== -->
+<section class="promo-slider">
+  <div class="promo-text">
+    <h2>Компания «Пульсар»</h2>
+    <p>Профессиональные аудио и визуальные решения</p>
+  </div>
+
+  <div class="promo-image">
+    <img src="img/kamera.png" class="slide-img active">
+    <img src="img/led_ekran_2.png" class="slide-img">
+  </div>
+</section>
+
+
+<!-- ================== ТОВАРЫ ================== -->
+<section class="container">
+  <h2 class="section-title">Рекомендации</h2>
+
+  <div class="products-grid">
+    <div class="product-card">
+      <img src="https://rusmarta.ru/upload/iblock/82f/flv6z0e9wuif5i0jrzlla96gwmyxdhf2/CMVcam_seetong.jpg" alt="">
+      <div class="product-info">
+        <p class="sku">Артикул: 35677</p>
+        <h3>IP камера видеонаблюдения PULSAR 2MP</h3>
+        <div class="product-bottom">
+          <span class="price">7 200 сом</span>
+          <span class="fav">♡</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaNsE62uarmxSx90DRfw5or5f4QEk34er36w&s" alt="">
+      <div class="product-info">
+        <p class="sku">Артикул: 35802</p>
+        <h3>IP камера PULSAR купольная 4MP</h3>
+        <div class="product-bottom">
+          <span class="price">5 450 сом</span>
+          <span class="fav">♡</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img src="https://itmag.kz/upload/iblock/19/87/product_image_86687_1234798.jpg" alt="">
+      <div class="product-info">
+        <p class="sku">Артикул: 34129</p>
+        <h3>Монитор 24” IPS Full HD</h3>
+        <div class="product-bottom">
+          <span class="price">30 790 сом</span>
+          <span class="fav">♡</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <img src="https://delta-game.ru/wp-content/uploads/2018/04/AG32C-edge.png" alt="">
+      <div class="product-info">
+        <p class="sku">Артикул: 34128</p>
+        <h3>Монитор 27” IPS QHD</h3>
+        <div class="product-bottom">
+          <span class="price">20 850 сом</span>
+          <span class="fav">♡</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- ================== Новости  ================== -->
+<section class="container">
+  <h2 class="section-title">Новости</h2>
+
+  <div class="news-slider-wrapper">
+    <button class="news-btn prev">‹</button>
+
+    <div class="news-slider">
+      <div class="news-track">
+
+        <!-- 1 -->
+        <div class="news-card">
+          <img src="https://static.tildacdn.com/tild6666-3863-4337-b836-636430386138/___.jpg">
+          <h3>Поступление оборудования AJAX</h3>
+          <p>Новое поступление охранных систем</p>
+        </div>
+
+        <!-- 2 -->
+        <div class="news-card">
+          <img src="https://tdtorus.ru/uploads/product/19538/DS-2DE5425IW-AE(T5)(B).png">
+          <h3>Большое поступление HIKVISION</h3>
+          <p>Камеры, видеодомофоны и коммутаторы</p>
+        </div>
+
+        <!-- 3 -->
+        <div class="news-card">
+          <img src="https://www.kivano.kg/images/product/154312/full/1754394932_08021300.jpg">
+          <h3>Поступление оборудования DAHUA</h3>
+          <p>Новые возможности безопасности</p>
+        </div>
+
+        <!-- 4 -->
+        <div class="news-card">
+          <img src="https://content.secur.ua/goods/images/big/OPfSHT8Vm2Zb90xx0FCL6ZxvWbCg83VH6sivnTPY.webp">
+          <h3>Новое поступление TP-Link VIGI</h3>
+          <p>Видеонаблюдение нового поколения</p>
+        </div>
+
+        <!-- 5 -->
+        <div class="news-card">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMTuUDc-L12Lg1uE2ETw1SEI_eWitCzdoGiQ&s">
+          <h3>Новые партнёры PULSAR</h3>
+          <p>Расширяем линейку брендов</p>
+        </div>
+
+        <!-- 6 -->
+        <div class="news-card">
+          <img src="https://avatars.mds.yandex.net/get-autoru-vos/6209445/03d31fba3baa577effd6f9261b7c1765/456x342n">
+          <h3>Акции и специальные цены</h3>
+          <p>Выгодные предложения месяца</p>
+        </div>
+
+        <!-- 7 -->
+        <div class="news-card">
+          <img src="https://cdn-ultra.esempla.com/storage/webp/68b43c7f-4865-4c2c-a71b-c734c78836c8.webp">
+          <h3>Обновление ассортимента</h3>
+          <p>Новинки уже в наличии</p>
+        </div>
+
+        <!-- 8 -->
+        <div class="news-card">
+          <img src="https://www.dahuasecurity.com/asset/upload/uploads/image/20180322/20180322142407_54063.png">
+          <h3>Сотрудничество с брендами</h3>
+          <p>Новые контракты и поставки</p>
+        </div>
+
+      </div>
+    </div>
+
+    <button class="news-btn next">›</button>
+  </div>
+</section>
+
+
+<!-- ================== КОНТАКТЫ ================== -->
+<section class="container">
+  <div class="map-section">
+    <div class="map-info">
+      <h3>Компания «Пульсар»</h3>
+
+      <p>📍 Бишкек   ТЦ Малика </p>
+      <p> Проспект Шабдан Баатыра, 128</p>
+
+      <p class="sales">
+        🟢 Отдел продаж:<br>
+        <a href="https://wa.me/996557540202" target="_blank">
+          +996 (557) 54-02-02
+        </a>
+      </p>
+
+      <a
+        href="https://www.google.com/maps?q=Проспект+Шабдан+Баатыра+128+Бишкек"
+        target="_blank"
+        class="map-btn"
+      >
+        Открыть в Google Maps
+      </a>
+    </div>
+
+    <div class="map-frame">
+      <iframe
+        src="https://www.google.com/maps?q=Проспект+Шабдан+Баатыра+128+Бишкек&output=embed"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+
+
+<footer class="footer">
+  <div class="footer-top container">
+    <div class="footer-col">
+      <h4>Покупательский сервис</h4>
+      <a href="#">Отложенные товары</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Для партнёров</h4>
+      <a href="#">Партнёрам</a>
+      <a href="#">Монтаж</a>
+      <a href="#">Дилерам</a>
+    </div>
+
+    <div class="footer-col">
+      <h4>Магазин</h4>
+      <a href="#">Бренды</a>
+      <a href="#">Контакты</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom container">
+    <div class="footer-left">
+      <span class="footer-logo">ПУЛЬСАР</span>
+      <span class="copyright">© 2026 Pulsar.kg</span>
+    </div>
+
+    <div class="footer-socials">
+      <a href="https://instagram.com/pulsar.kg" target="_blank" class="social">
+        📷 Instagram
+      </a>
+      <a href="https://www.tiktok.com/@pulsar.kg" target="_blank" class="social">
+        🎵 TikTok
+      </a>
+      <a href="https://wa.me/996557540202" target="_blank" class="social">
+        💬 WhatsApp
+      </a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+function toggleTheme() {
+  document.body.classList.toggle('light');
+}
+
+
+function toggleContacts() {
+  document.getElementById('contactsDropdown').classList.toggle('show');
+}
+
+document.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.contacts-wrapper');
+  if (!wrapper.contains(e.target)) {
+    document.getElementById('contactsDropdown').classList.remove('show');
+  }
+});
+
+
+let slides = document.querySelectorAll('.slide-img');
+var index = 0;
+
+setInterval(() => {
+  slides[index].classList.remove('active');
+  index = (index + 1) % slides.length;
+  slides[index].classList.add('active');
+}, 3000);
+
+function slideNews(direction) {
+  const slider = document.getElementById('newsSlider');
+  slider.scrollBy({
+    left: direction * 300,
+    behavior: 'smooth'
+  });
+}
+
+const track = document.querySelector('.news-track');
+const cards = document.querySelectorAll('.news-card');
+const prevBtn = document.querySelector('.news-btn.prev');
+const nextBtn = document.querySelector('.news-btn.next');
+
+var index = 0;
+const cardWidth = cards[0].offsetWidth + 20; // карточка + gap
+const visibleCards = Math.floor(document.querySelector('.news-slider').offsetWidth / cardWidth);
+const maxIndex = cards.length - visibleCards;
+
+function updateSlider() {
+  track.style.transform = `translateX(-${index * cardWidth}px)`;
+}
+
+nextBtn.addEventListener('click', () => {
+  index = index >= maxIndex ? 0 : index + 1;
+  updateSlider();
+});
+
+prevBtn.addEventListener('click', () => {
+  index = index <= 0 ? maxIndex : index - 1;
+  updateSlider();
+});
+
+/* АВТОПРОКРУТКА */
+setInterval(() => {
+  index = index >= maxIndex ? 0 : index + 1;
+  updateSlider();
+}, 3500);
+
+
+
+</script>
+
+</body>
+</html>

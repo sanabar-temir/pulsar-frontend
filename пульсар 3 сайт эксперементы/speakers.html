@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Колонки — PULSAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ================= ОБЩЕЕ ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  background: #0b0f19;
+  color: #ffffff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* ================= ШАПКА ================= */
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-img {
+  height: 80px;
+}
+
+.contacts-wrapper {
+  position: relative;
+}
+
+.contacts-btn {
+  cursor: pointer;
+  font-size: 15px;
+  opacity: .9;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  cursor: pointer;
+}
+
+
+.contacts-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #4B0082;
+  transition: width .25s ease;
+}
+
+.contacts-btn:hover::after {
+  width: 100%;
+}
+
+.contacts-dropdown {
+  position: absolute;
+  top: 36px;
+  left: 0;
+  width: 280px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.25);
+  display: none;
+  z-index: 100;
+}
+
+.contacts-dropdown.show {
+  display: block;
+}
+
+.contact-item {
+  display: block;
+  padding: 8px 6px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 8px;
+}
+
+.contact-item:hover {
+  background: rgba(79,107,255,.1);
+}
+
+.contact-item span {
+  display: block;
+  font-size: 12px;
+  opacity: .7;
+}
+
+.contacts-link {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.icon {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.search {
+  width: 520px;   /* ← можно 500–600px */
+  max-width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+}
+
+
+
+/* ================= ВКЛАДКИ ================= */
+.tabs-wrapper {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.catalog-tab {
+  background: #00CED1;
+  color: #fff;
+  text-decoration: none;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.tab {
+  background: #ffffff;
+  color: #000000;
+  text-decoration: none;
+  padding: 14px 22px;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #e5e5e5 inset;
+}
+
+.tab.active {
+  background: #e6e6e6;
+  font-weight: 600;
+}
+
+/* ================= СЛАЙДЕР ================= */
+.promo-slider {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 80px;
+  background: linear-gradient(135deg, #6f79ff, #7b6cff);
+  border-radius: 28px;
+  padding: 40px 60px;
+  margin: 20px;
+}
+
+.promo-text {
+  max-width: 32%;
+}
+
+.promo-image {
+  width: 360px;
+  height: 360px;
+  border-radius: 24px;
+  background: rgba(255,255,255,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ================= ТОВАРЫ ================= */
+.section-title {
+  font-size: 24px;
+  margin: 40px 0 20px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background: #ffffff;
+  color: #000;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.06);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+}
+
+.product-card h3 {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.price {
+  color: #0a57c7;
+  font-weight: 600;
+}
+
+/* ================= НОВОСТИ ================= */
+.news-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.news-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.news-card {
+  min-width: 260px;
+  background: #ffffff;
+  color: #000;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.news-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.news-card h3 {
+  font-size: 14px;
+  margin: 10px;
+}
+
+/* ================= ПОДВАЛ ================= */
+.footer {
+  background: #2f3846;
+  margin-top: 60px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  padding: 40px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+}
+
+.footer-col h4 {
+  margin-bottom: 14px;
+}
+
+.footer-col a {
+  display: block;
+  color: #cfd6e1;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 24px;
+}
+
+.social {
+  color: #fff;
+  text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ШАПКА -->
+<header class="container header">
+  <div class="header-left">
+    <img src="img/Pulsarprozrachnyi.png" alt="Pulsar" class="logo-img">
+
+   <div class="contacts-wrapper">
+  <div class="contacts-btn" onclick="toggleContacts()">
+    Контакты <span class="arrow">⌄</span>
+  </div>
+
+  <div class="contacts-dropdown" id="contactsDropdown">
+    <a href="https://wa.me/996557540202" target="_blank" class="contact-item">
+      <strong>+996 (557) 54-02-02</strong>
+      <span>Байтик-Баатыра 17/2</span>
+    </a>
+
+    <a href="https://wa.me/996550241116" target="_blank" class="contact-item">
+      <strong>+996 (550) 24-11-16</strong>
+      <span>Тоголок молдо 6</span>
+    </a>
+
+    <a href="/contacts.html" class="contacts-link">
+      На страницу контакты
+    </a>
+  </div>
+</div>
+
+  <input class="search" placeholder="Поиск...">
+
+  <div class="header-right">
+    <div class="icon">❤️</div>
+    <div class="icon">📸</div>
+    <div class="icon">KG</div>
+    <div class="icon" onclick="toggleTheme()">🌙</div>
+  </div>
+</header>
+
+
+<!-- ВКЛАДКИ -->
+<section class="tabs-wrapper">
+  <a href="catalog.html" class="catalog-tab">☰ Каталог</a>
+  <a href="led.html" class="tab">LED-экраны</a>
+  <a href="speakers.html" class="tab active">Колонки</a>
+  <a href="office.html" class="tab">Орг-техника</a>
+  <a href="cameras.html" class="tab">Камеры</a>
+  <a href="music.html" class="tab">Музыкальные инструменты</a>
+  <a href="other.html" class="tab">Другое</a>
+</section>
+
+<!-- СЛАЙДЕР -->
+
+
+<!-- ТОВАРЫ -->
+<section class="container">
+  <h2 class="section-title">Колонки</h2>
+
+  <div class="products-grid">
+    <div class="product-card">
+      <img src="img/speaker1.jpg">
+      <h3>Активная колонка PULSAR 500W</h3>
+      <div class="price">18 500 сом</div>
+    </div>
+
+    <div class="product-card">
+      <img src="img/speaker2.jpg">
+      <h3>Пассивная акустика PULSAR 300W</h3>
+      <div class="price">12 800 сом</div>
+    </div>
+
+    <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div>
+     <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div> <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div> <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div> <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div> <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div>
+     <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div> <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div> <div class="product-card">
+      <img src="img/speaker3.jpg">
+      <h3>Сценическая колонка PULSAR PRO</h3>
+      <div class="price">24 900 сом</div>
+    </div>
+  </div>
+</section>
+
+<!-- НОВОСТИ -->
+<section class="container">
+  <h2 class="section-title">Новости</h2>
+  <div class="news-slider">
+    <div class="news-card">
+      <img src="img/news1.jpg">
+      <h3>Поступление акустики</h3>
+    </div>
+    <div class="news-card">
+      <img src="img/news2.jpg">
+      <h3>Новинки аудиооборудования</h3>
+    </div>
+  </div>
+</section>
+
+<!-- ПОДВАЛ -->
+<footer class="footer">
+  <div class="footer-top container">
+    <div class="footer-col">
+      <h4>Покупательский сервис</h4>
+      <a href="#">Отложенные товары</a>
+    </div>
+    <div class="footer-col">
+      <h4>Для партнёров</h4>
+      <a href="#">Партнёрам</a>
+      <a href="#">Монтаж</a>
+      <a href="#">Дилерам</a>
+    </div>
+    <div class="footer-col">
+      <h4>Магазин</h4>
+      <a href="#">Бренды</a>
+      <a href="#">Контакты</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom container">
+    <div>© 2026 Pulsar.kg</div>
+    <div class="footer-socials">
+      <a href="https://instagram.com/pulsar.kg" class="social">Instagram</a>
+      <a href="https://tiktok.com/@pulsar.kg" class="social">TikTok</a>
+      <a href="https://wa.me/996557540202" class="social">WhatsApp</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const toggle = document.getElementById('themeToggle');
+
+toggle.addEventListener('click', () => {
+  document.body.classList.toggle('light');
+
+  toggle.textContent =
+    document.body.classList.contains('light') ? '☀️' : '🌙';
+});
+
+function toggleContacts() {
+  document.getElementById('contactsDropdown').classList.toggle('show');
+}
+
+document.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.contacts-wrapper');
+  if (!wrapper.contains(e.target)) {
+    document.getElementById('contactsDropdown').classList.remove('show');
+  }
+});
+</script>
+
+</body>
+</html>
